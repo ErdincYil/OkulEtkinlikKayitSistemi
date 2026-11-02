@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Specialized;
 
 namespace OkulEtkinlikKayıtSistemi
 {
@@ -69,11 +70,70 @@ namespace OkulEtkinlikKayıtSistemi
 
                     if (anaMenuSecim == 1)
                     {
+                        if(etkinlikAdları.Count==0)
+                        {
+                            Console.WriteLine("Etkinliğimiz Bulunmamaktadır.");
+                        }
+                        for(int i=0;i<etkinlikAdları.Count;i++)
+                        {
+                            int no = i + 1;
+                            string ad = (string)etkinlikAdları[i];
+                            DateTime tarih = (DateTime)etkinlikTarihleri[i];
+                            int kontenjan = (int)kontenjanlar[i];
+                            int kayit = (int)kayitSayiları[i];
+                            decimal ucret = (decimal)ucretler[i];
+                            bool aktifMi = (bool)etkinlikAktifMi[i];
 
+                            string durum = aktifMi ? "Aktif" : "İptal";
+                            if(aktifMi && tarih<DateTime.Today)
+                            {
+                                durum="Tarihi Geçti";
+                            }
+                            Console.WriteLine("Etkinlik No:"+no);
+                            Console.WriteLine("Etkinlik Adı:"+ad);
+                            Console.WriteLine("Etkinlik Tarihi:"+tarih);
+                            Console.WriteLine("Kontenjan"+kontenjan);
+                            Console.WriteLine("Kalan Kontenjan:"+(kontenjan-kayit));
+                            Console.WriteLine("Ücret:"+ucret+"TL");
+                            Console.WriteLine("Durum"+durum);
+
+                            Console.WriteLine("Devam Etmek İçin Bir Tuşa Basın");
+                            Console.ReadKey(true);
+                            break;
+                        }
                     }
                     else if (anaMenuSecim == 2)
                     {
+                        Console.WriteLine("Aranacak Etkinlik Adı:");
+                        string aranankelime = (Console.ReadLine() ?? "").Trim().ToLower();
 
+                        if(aranankelime.Length==0)
+                        {
+                            Console.WriteLine("Boş Bırakmayın");
+                        }
+                        else
+                        {
+                            bool bulundu = false;
+                            for(int i=0;i<etkinlikAdları.Count;i++)
+                            {
+                                string etkinlikAdi = (string)etkinlikAdları[i];
+
+                                if (etkinlikAdi.ToLower().Contains(aranankelime))
+                                {
+                                    bulundu = true;
+                                    DateTime tarih = (DateTime)etkinlikTarihleri[i];
+                                    int kalan = (int)kontenjanlar[i] - (int)kayitSayiları[i];
+                                    decimal ucret = (decimal)ucretler[i];
+                                    bool aktifMi = (bool)etkinlikAktifMi[i];
+
+                                    Console.WriteLine("Etkinlik Adı:" + etkinlikAdi);
+                                    Console.WriteLine("Etkinlik Tarihi:" + tarih);
+                                    Console.WriteLine("Ücret:"+ucret);
+                                    Console.WriteLine("Kalan Kontenjan:"+kalan);
+                                    Console.WriteLine("Durum:"+aktifMi);
+                                }
+                            }
+                        }
                     }
                     else if (anaMenuSecim == 3)
                     {
